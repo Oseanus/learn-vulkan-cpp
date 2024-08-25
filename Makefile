@@ -5,7 +5,7 @@ NAME = VulkanApp
 OUT = output
 
 $(NAME): main.cpp
-	mkdir -p output
+	mkdir -p $(OUT)
 	$(CC) $(CFLAGS) -o $(OUT)/$(NAME) main.cpp $(LDFLAGS)
 
 .PHONY: test clean
