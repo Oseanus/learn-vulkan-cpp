@@ -3,6 +3,7 @@
 #include <vulkan/vulkan.h>
 
 #include <iostream>
+#include <vector>
 #include <stdexcept>
 #include <cstdlib>
 
@@ -25,6 +26,19 @@ public:
     }
 
 private:
+    void ListExtensions()
+    {
+        uint32_t extensionCount = 0;
+        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+        std::vector<VkExtensionProperties> extensions(extensionCount);
+        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
+
+        for (const auto& extension : extensions)
+        {
+            std::cout << "[+] " << extension.extensionName << std::endl;
+        }
+    }
+
     void CreateInstance()
     {
         VkApplicationInfo appInfo {};
@@ -47,6 +61,8 @@ private:
         createInfo.enabledExtensionCount = glfwExtensionCount;
         createInfo.ppEnabledExtensionNames = glfwExtensions;
         createInfo.enabledLayerCount = 0;
+
+        ListExtensions();
 
         if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
         {
@@ -83,6 +99,8 @@ private:
 
     void CleanUp()
     {
+        vkDestroyInstance(instance, nullptr);
+
         glfwDestroyWindow(window);
 
         glfwTerminate();
