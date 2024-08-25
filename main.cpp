@@ -1,18 +1,42 @@
-#include <vulkan/vulkan.h>
+#define GLF_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
 
+const uint32_t WIDTH = 800;
+const uint32_t HEIGHT = 600;
+
 class HelloTriangleApplication
 {
+private: // Fields
+    GLFWwindow *window;
+
 public:
     void Run()
     {
-
+        InitWindow();
+        InitVulkan();
+        MainLoop();
+        CleanUp();
     }
 
 private:
+    void InitWindow()
+    {
+        glfwInit();
+        
+        // Say to GLFW not to use OpenGL
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
+        // Disable window resizing
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+        // Create window
+        window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+    }
+
     void InitVulkan()
     {
 
@@ -20,12 +44,17 @@ private:
 
     void MainLoop()
     {
-
+        while(!glfwWindowShouldClose(window))
+        {
+            glfwPollEvents();
+        }
     }
 
     void CleanUp()
     {
+        glfwDestroyWindow(window);
 
+        glfwTerminate();
     }
 };
 
